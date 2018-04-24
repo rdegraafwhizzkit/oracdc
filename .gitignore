@@ -6,3 +6,4 @@ AwsCredentials.properties
 kinesis.properties
 *.iml
 dependency-reduced-pom.xml
+conf

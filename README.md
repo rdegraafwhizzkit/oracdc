@@ -41,19 +41,32 @@ As a sysdba, create a user and grant just enough roles and privileges. Note that
 ## Running the jar (outside IDE)
 
 - Put cdc-1.0-SNAPSHOT.jar in an empty directory
+- Create a directory to hold the config files
+  * `mkdir conf`
+  * `cd conf`
 - Extract property files from the jar:
-  * `$ jar xf cdc-1.0-SNAPSHOT.jar cdc.properties.template db.properties.template`
-- Now rename, update and save those two properties files to your liking
+  * `$ jar xf ../cdc-1.0-SNAPSHOT.jar cdc.properties.template db.properties.template AwsCredentials.properties.template kinesis.properties.template`
+- Now rename, update and save those properties files to your liking
   * `mv db.properties.template db.properties`
   * `vi db.properties`
   * `chmod 600 db.properties`
   * `mv cdc.properties.template cdc.properties`
   * `vi cdc.properties`
+- If you are using the Kinesis writer, do the same for those property files
+  * `mv kinesis.properties.template kinesis.properties`
+  * `vi kinesis.properties`
+  * `mv AwsCredentials.properties.template AwsCredentials.properties`
+  * `vi AwsCredentials.properties`
+  * `chmod 600 AwsCredentials.properties`
 - Run the CDC tool:
-  * `$ java -cp "cdc-1.0-SNAPSHOT.jar:." nl.whizzkit.oracdc.CDC`
+  * `cd ..`
+  * `$ java -cp "cdc-1.0-SNAPSHOT.jar:./conf/" nl.whizzkit.oracdc.CDC`
 - Perform DML on the database table that is watched
 - You can stop the tool by pressing ctrl-c. The db connection will be shutdown by a shutdownhook
 
+## Solving errors 
+
+- If you run into `Exception in thread "main" java.sql.SQLException: ORA-01291: missing logfile` you probably have selected a `start` value in `cdc.properties` that is too far away in history.
 ## Properties
 
 - db.properties
