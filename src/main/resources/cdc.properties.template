@@ -1,0 +1,7 @@
+writer=ConsoleWriter
+driver=oracle.jdbc.OracleDriver
+url=jdbc:oracle:thin:@localhost:1521:XE
+start=01-Jan-2018 00:00:00
+operations='INSERT','UPDATE','DELETE'
+tables='EMPLOYEE','DEPARTMENT'
+schema='SCOTT'
