@@ -1,6 +1,6 @@
 # ORACDC
 
-Read Oracle Archive Log to support Changed Data Capture scenarios and output the statements to a writer of your liking
+Read Oracle Archive Log to support Changed Data Capture scenarios and output the statements to a writer of your liking.
 
 ## Compilation
 
@@ -42,16 +42,17 @@ As a sysdba, create a user and grant just enough roles and privileges. Note that
 
 - Put cdc-1.0-SNAPSHOT.jar in an empty directory
 - Extract property files from the jar:
-  * `$ jar xf cdc-1.0-SNAPSHOT.jar cdc.properties db.properties`
-- Remove these property files from the jar file:
-  * `$ zip -d cdc-1.0-SNAPSHOT.jar cdc.properties db.properties`
-- Now update and save those two properties files to your liking
+  * `$ jar xf cdc-1.0-SNAPSHOT.jar cdc.properties.template db.properties.template`
+- Now rename, update and save those two properties files to your liking
+  * `mv db.properties.template db.properties`
   * `vi db.properties`
   * `chmod 600 db.properties`
+  * `mv cdc.properties.template cdc.properties`
   * `vi cdc.properties`
 - Run the CDC tool:
   * `$ java -cp "cdc-1.0-SNAPSHOT.jar:." nl.whizzkit.oracdc.CDC`
 - Perform DML on the database table that is watched
+- You can stop the tool by pressing ctrl-c. The db connection will be shutdown by a shutdownhook
 
 ## Properties
 

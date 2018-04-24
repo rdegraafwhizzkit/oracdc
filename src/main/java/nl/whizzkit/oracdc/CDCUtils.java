@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
-class CDCUtils {
+public class CDCUtils {
 
     static void prepareNLS(Connection connection) throws SQLException {
         if (connection != null)
@@ -28,7 +28,7 @@ class CDCUtils {
                     .execute();
     }
 
-    static Properties readProperties(String name) throws IOException {
+    public static Properties readProperties(String name) throws IOException {
         Properties properties = new Properties();
         properties.load(Class.class.getResourceAsStream("/" + name + ".properties"));
         return properties;

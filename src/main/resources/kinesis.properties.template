@@ -1,0 +1,3 @@
+regionName=Ireland
+streamName=<streamName>
+partitionKeyPattern=partitionKey-%d
