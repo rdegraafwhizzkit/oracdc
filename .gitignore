@@ -7,3 +7,4 @@ kinesis.properties
 *.iml
 dependency-reduced-pom.xml
 conf
+.DS_Store

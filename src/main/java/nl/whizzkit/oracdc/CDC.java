@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 
 import java.sql.*;
 import java.util.Properties;
+import java.util.Vector;
 
 public class CDC implements IShutdownThread {
 
@@ -35,7 +36,9 @@ public class CDC implements IShutdownThread {
 
         Properties properties = CDCUtils.readProperties("cdc");
 
-        IWritable iWritable = (IWritable) (Class.forName(properties.getProperty("writer")).getConstructor().newInstance());
+        Vector<IWritable> iWritables = new Vector<>();
+        for (String iWritable : properties.getProperty("writers").split(","))
+            iWritables.add((IWritable) (Class.forName(iWritable.trim()).getConstructor().newInstance()));
 
         Class.forName(properties.getProperty("driver"));
         connection = DriverManager.getConnection(properties.getProperty("url"), CDCUtils.readProperties("db"));
@@ -57,7 +60,8 @@ public class CDC implements IShutdownThread {
                 );
         try {
             while (resultSet.next())
-                iWritable.write(resultSet);
+                for (IWritable iWritable : iWritables)
+                    iWritable.write(resultSet);
         } catch (SQLTimeoutException ex) {
             logger.error(ex.getMessage());
         }

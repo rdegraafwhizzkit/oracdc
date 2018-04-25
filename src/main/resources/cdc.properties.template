@@ -1,4 +1,4 @@
-writer=nl.whizzkit.oracdc.writer.ConsoleWriter
+writers=nl.whizzkit.oracdc.writer.ConsoleWriter,nl.whizzkit.oracdc.writer.DummyWriter
 driver=oracle.jdbc.OracleDriver
 url=jdbc:oracle:thin:@localhost:1521:XE
 start=01-Jan-2018 00:00:00

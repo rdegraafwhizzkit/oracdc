@@ -77,7 +77,7 @@ As a sysdba, create a user and grant just enough roles and privileges. Note that
   * `user=scott` : username
   * `password=tiger` : password
 - cdc.properties
-  * `writer=ConsoleWriter`: where to direct the output
+  * `writer=nl.whizzkit.oracdc.writer.ConsoleWriter, nl.whizzkit.oracdc.writer.DummyWriter`: where to direct the output. You may add a comma separated list of class names.
   * `driver=oracle.jdbc.OracleDriver`: database connection driver
   * `url=jdbc:oracle:thin:@localhost:1521:XE` : database connection url
   * `start=01-Jan-2018 00:00:00` : start time of redo log
