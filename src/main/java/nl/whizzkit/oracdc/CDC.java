@@ -44,20 +44,20 @@ public class CDC implements IShutdownThread {
         CDCUtils.startLogMnr(connection, properties.getProperty("start"));
 
         statement = connection.createStatement();
+        statement.setFetchSize(1);
+        statement.setQueryTimeout(0);
 
         ResultSet resultSet = statement
-                .executeQuery("SELECT sql_redo FROM v$logmnr_contents WHERE table_name in ( " +
-                        properties.getProperty("tables") +
-                        " ) AND seg_owner = " +
-                        properties.getProperty("schema") +
-                        " AND operation IN (" +
-                        properties.getProperty("operations") +
-                        ")"
+                .executeQuery(String.format(
+                        "SELECT scn,timestamp,operation,seg_owner,table_name,row_id,sql_redo FROM v$logmnr_contents WHERE table_name in (%s) AND seg_owner = %s AND operation IN (%s)",
+                        properties.getProperty("tables"),
+                        properties.getProperty("schema"),
+                        properties.getProperty("operations")
+                        )
                 );
         try {
-            while (resultSet.next()) {
-                iWritable.write(resultSet.getString("sql_redo"));
-            }
+            while (resultSet.next())
+                iWritable.write(resultSet);
         } catch (SQLTimeoutException ex) {
             logger.error(ex.getMessage());
         }

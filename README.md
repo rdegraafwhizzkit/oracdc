@@ -6,6 +6,7 @@ Read Oracle Archive Log to support Changed Data Capture scenarios and output the
 
 - Download Oracle JDBC Driver from http://www.oracle.com/technetwork/apps-tech/jdbc-112010-090769.html
 - Install the driver in your own MVN repository by executing `mvn install:install-file -Dfile=ojdbc6.jar -DgroupId=com.oracle -DartifactId=ojdbc -Dversion=6 -Dpackaging=jar`
+- I still have to take a look if one is allowed to package the Oracle JDBC driver with the application, I suspect not!
 - Build jar by invoking `mvn clean package`
 
 ## Prepare database
@@ -60,13 +61,16 @@ As a sysdba, create a user and grant just enough roles and privileges. Note that
   * `chmod 600 AwsCredentials.properties`
 - Run the CDC tool:
   * `cd ..`
-  * `$ java -cp "cdc-1.0-SNAPSHOT.jar:./conf/" nl.whizzkit.oracdc.CDC`
+  * `$ java -cp "oracdc-1.0-SNAPSHOT.jar:./conf/" nl.whizzkit.oracdc.CDC`
 - Perform DML on the database table that is watched
 - You can stop the tool by pressing ctrl-c. The db connection will be shutdown by a shutdownhook
 
 ## Solving errors 
 
 - If you run into `Exception in thread "main" java.sql.SQLException: ORA-01291: missing logfile` you probably have selected a `start` value in `cdc.properties` that is too far away in history.
+- The fetchSize is currently set to '1' in the program. This will lead to a lot of network traffic, but it results in tighter synchronization
+- I have created a separate conf directory in the project path that holds the 'real' properties. In IDEA, add `-Xbootclasspath/a:conf/` to the VM Options in a run configuration
+
 ## Properties
 
 - db.properties
@@ -83,4 +87,8 @@ As a sysdba, create a user and grant just enough roles and privileges. Note that
 
 ## Adding new writers
 
-You may add new writers by creating classes that implement the IWritable interface and configure the `writer` property value accordingly.
+You may add new writers by creating classes that implement the IWritable interface and configure the `writer` property value accordingly. Currently there are 3 writers:
+
+- ConsoleWriter. This just writes the statement to the console.
+- KafkaWriter. This one writes to a Kafka topic, config is hardcoded for now.
+- KinesisWriter. This one writes to a Kinesis Stream, it's configurable by editing kinesis.properties and AwsCredentials.properties.

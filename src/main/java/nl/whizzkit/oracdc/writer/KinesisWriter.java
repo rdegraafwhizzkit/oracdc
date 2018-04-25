@@ -10,6 +10,8 @@ import com.amazonaws.services.kinesis.model.PutRecordsResult;
 import nl.whizzkit.oracdc.CDCUtils;
 
 import java.nio.ByteBuffer;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -35,13 +37,13 @@ public class KinesisWriter implements IWritable {
     }
 
     @Override
-    public void write(String output) {
+    public void write(ResultSet resultSet) throws SQLException {
 
         PutRecordsRequest putRecordsRequest = new PutRecordsRequest();
         putRecordsRequest.setStreamName(streamName);
         List<PutRecordsRequestEntry> putRecordsRequestEntryList = new ArrayList<>();
         PutRecordsRequestEntry putRecordsRequestEntry = new PutRecordsRequestEntry();
-        putRecordsRequestEntry.setData(ByteBuffer.wrap(output.getBytes()));
+        putRecordsRequestEntry.setData(ByteBuffer.wrap(resultSet.getString("sql_redo").getBytes()));
         putRecordsRequestEntry.setPartitionKey(String.format(partitionKeyPattern, 0));
         putRecordsRequestEntryList.add(putRecordsRequestEntry);
 
