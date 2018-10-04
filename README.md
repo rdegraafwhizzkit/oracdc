@@ -41,7 +41,7 @@ As a sysdba, create a user and grant just enough roles and privileges. Note that
 
 ## Running the jar (outside IDE)
 
-- Put cdc-1.0-SNAPSHOT.jar in an empty directory
+- Put oracdc-1.0-SNAPSHOT.jar in an empty directory
 - Create a directory to hold the config files
   * `mkdir conf`
   * `cd conf`

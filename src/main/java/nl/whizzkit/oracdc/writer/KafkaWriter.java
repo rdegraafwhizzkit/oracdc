@@ -5,6 +5,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.sql.ResultSet;
 
+@SuppressWarnings("unused")
 public class KafkaWriter implements IWritable {
 
     private final static String TOPIC = "my-example-topic";

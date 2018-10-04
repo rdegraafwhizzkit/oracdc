@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+@SuppressWarnings("unused")
 public class KinesisWriter implements IWritable {
 
     private AmazonKinesis kinesisClient;
